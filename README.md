@@ -29,3 +29,4 @@ Sitio estático en Astro para Punto Kinesio (Kinesiología & Fisioterapia, Mendo
 - Fotos: las actuales son de stock (Unsplash, licencia libre). Reemplazar por fotos reales.
 - Duración de servicios y más tratamientos: completar en `services`.
 - Logo: está recreado en código (`src/components/Logo.astro`); se puede cambiar por el SVG oficial.
+# punto-kinesio
