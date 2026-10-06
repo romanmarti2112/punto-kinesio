@@ -52,10 +52,9 @@ html {
   scroll-padding-top: var(--nav-h);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+/* Siempre suave: muchos celulares activan "movimiento reducido" con el ahorro de batería. */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
