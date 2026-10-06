@@ -10,7 +10,8 @@ const motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').ma
 
 const revealables = document.querySelectorAll<HTMLElement>('[data-reveal]');
 
-if (!motionOK || !('IntersectionObserver' in window)) {
+// Con movimiento reducido igual se revela, pero solo con un fundido (ver global.css).
+if (!('IntersectionObserver' in window)) {
   revealables.forEach((el) => el.classList.add('is-in'));
 } else {
   const io = new IntersectionObserver(

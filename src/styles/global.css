@@ -449,4 +449,16 @@ button {
   [data-parallax] {
     transform: none !important;
   }
+
+  /* Sin desplazamientos, pero los bloques igual aparecen con un fundido suave. */
+  .js [data-reveal] {
+    opacity: 0;
+    transition: opacity var(--dur) var(--ease);
+    transition-delay: var(--d, 0ms);
+    transition-duration: var(--dur) !important;
+  }
+
+  .js [data-reveal].is-in {
+    opacity: 1;
+  }
 }
