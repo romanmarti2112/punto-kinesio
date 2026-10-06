@@ -1,0 +1,339 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { primaryWhatsApp } from '../lib/links';
+
+const { hero } = business.images;
+const badgeText =
+  `${business.activity.replace('&', '·')} · ${business.location.city} · `.toUpperCase();
+const ticker = ['Kinesiología', 'Fisioterapia', 'Movimiento', 'Bienestar', 'Mendoza'];
+---
+
+<section class="hero" id="inicio" aria-labelledby="hero-title">
+  <div class="hero__media">
+    <div class="hero__img frame" data-reveal="clip">
+      <div data-parallax="0.05">
+        <Picture
+          src={hero.src}
+          alt={hero.alt}
+          formats={['avif', 'webp']}
+          widths={[480, 768, 1080, 1440, 1920]}
+          sizes="(min-width: 1024px) 46vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+
+    <!-- Sello giratorio: el "punto" de la marca -->
+    <div class="hero__badge" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <path id="badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"></path>
+        </defs>
+        <circle cx="100" cy="100" r="100" class="hero__badge-bg"></circle>
+        <text>
+          <textPath href="#badge-circle" textLength="488">
+            {badgeText}
+          </textPath>
+        </text>
+      </svg>
+      <span class="hero__badge-dot"></span>
+    </div>
+  </div>
+
+  <div class="hero__content container">
+    <h1 id="hero-title" class="hero__title">
+      <span class="eyebrow hero__eyebrow" data-reveal="fade">
+        {business.name} — {business.activity} en {business.location.city}
+      </span>
+      <span class="hero__display" data-reveal style="--d: 80ms">
+        Tu punto de encuentro con el <em>movimiento.</em>
+      </span>
+    </h1>
+
+    <p class="lead hero__lead" data-reveal style="--d: 180ms">
+      Kinesiología y fisioterapia con atención personalizada, en un espacio pensado para tu
+      bienestar.
+    </p>
+
+    <div class="hero__actions" data-reveal style="--d: 260ms">
+      <a class="btn" href={primaryWhatsApp} target="_blank" rel="noopener">
+        <Icon name="whatsapp" />
+        Solicitar turno
+      </a>
+      <a class="btn btn--ghost" href="#nosotros">
+        Conocer Punto Kinesio
+        <Icon name="arrow-down" />
+      </a>
+    </div>
+
+    <p class="hero__meta" data-reveal="fade" style="--d: 360ms">
+      <Icon name="pin" size={16} />
+      {business.location.city}, {business.location.country}
+    </p>
+  </div>
+</section>
+
+<!-- Cinta de transición -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    {[0, 1].map(() => (
+      <ul role="list">
+        {[...ticker, ...ticker].map((t) => (
+          <li>{t}</li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+  }
+
+  /* ----- Mobile: imagen arriba a sangre, panel de texto superpuesto ----- */
+  .hero__media {
+    position: relative;
+  }
+
+  .hero__img {
+    height: min(44svh, 26rem);
+    min-height: 16rem;
+  }
+
+  .hero__content {
+    position: relative;
+    padding-top: 2rem;
+    padding-bottom: 3.5rem;
+    background: var(--paper);
+  }
+
+  .hero__title {
+    display: grid;
+    gap: 1.1rem;
+    font-weight: inherit;
+  }
+
+  .hero__eyebrow {
+    font-size: 0.68rem;
+    line-height: 1.5;
+    padding-right: 5.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .hero__eyebrow {
+      padding-right: 0;
+    }
+  }
+
+  .hero__display {
+    display: block;
+    font-size: var(--fs-display);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .hero__display em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.1em;
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+    color: var(--blue);
+  }
+
+  .hero__lead {
+    margin-top: 1.4rem;
+  }
+
+  .hero__actions {
+    margin-top: 2rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .hero__meta {
+    margin-top: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  /* ----- Sello ----- */
+  .hero__badge {
+    position: absolute;
+    right: var(--gutter);
+    bottom: -2.4rem;
+    z-index: 2;
+    width: 5.5rem;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  .hero__badge svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: spin 26s linear infinite;
+  }
+
+  .hero__badge-bg {
+    fill: var(--ink);
+  }
+
+  .hero__badge text {
+    fill: var(--paper);
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .hero__badge-dot {
+    position: relative;
+    width: 26%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 0 6px rgb(11 111 179 / 0.25);
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ----- Cinta ----- */
+  .ticker {
+    background: var(--ink);
+    color: var(--paper);
+    overflow: hidden;
+    padding-block: 1.05rem;
+  }
+
+  .ticker__track {
+    display: flex;
+    width: max-content;
+    animation: ticker 38s linear infinite;
+  }
+
+  .ticker ul {
+    display: flex;
+  }
+
+  .ticker li {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+    padding-right: 2.25rem;
+    font-size: clamp(0.95rem, 0.8rem + 0.6vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .ticker li:nth-child(even) {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.1rem, 0.9rem + 0.7vw, 1.45rem);
+  }
+
+  .ticker li::after {
+    content: '';
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* ----- Tablet ----- */
+  @media (min-width: 640px) {
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .hero__badge {
+      width: 7rem;
+      bottom: -3rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero__img {
+      height: 62svh;
+      max-height: 40rem;
+    }
+    .hero__content {
+      width: min(88%, 46rem);
+      margin-top: -5rem;
+      margin-left: 0;
+      padding-top: 3rem;
+      padding-right: 3rem;
+      padding-left: var(--gutter);
+    }
+  }
+
+  /* ----- Escritorio: composición partida, imagen a sangre a la derecha ----- */
+  @media (min-width: 1024px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      min-height: calc(100svh - var(--nav-h) - 3.4rem);
+      max-height: 60rem;
+    }
+
+    .hero__media {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .hero__img {
+      position: absolute;
+      inset: 0 0 0 0;
+      height: auto;
+      max-height: none;
+    }
+
+    .hero__badge {
+      right: auto;
+      left: -4.75rem;
+      bottom: 3.5rem;
+      width: 9.5rem;
+    }
+
+    .hero__content {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding-block: 4rem 4.5rem;
+      padding-left: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+      padding-right: clamp(2rem, 4vw, 5rem);
+      background: none;
+    }
+
+    .hero__display {
+      font-size: clamp(3.4rem, 1rem + 4.6vw, 6.6rem);
+    }
+  }
+</style>

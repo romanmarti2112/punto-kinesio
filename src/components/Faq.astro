@@ -1,0 +1,156 @@
+---
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { primaryWhatsApp } from '../lib/links';
+---
+
+<section class="faq section" id="preguntas" aria-labelledby="faq-title">
+  <div class="faq__grid container">
+    <header class="faq__head">
+      <p class="eyebrow" data-reveal>
+        <span class="num">08</span> Preguntas frecuentes
+      </p>
+      <h2 id="faq-title" class="title" data-reveal style="--d: 80ms">
+        Lo que <em>suelen</em> preguntarnos.
+      </h2>
+      <p class="faq__more" data-reveal style="--d: 140ms">
+        ¿Tenés otra duda?
+        <a class="link-line" href={primaryWhatsApp} target="_blank" rel="noopener">
+          Escribinos
+        </a>
+      </p>
+    </header>
+
+    <div class="faq__list">
+      {business.faqs.map((f, i) => (
+        <details class="qa" data-reveal style={`--d: ${i * 40}ms`} name="faq">
+          <summary>
+            <span>{f.question}</span>
+            <span class="qa__icon" aria-hidden="true">
+              <Icon name="plus" size={20} />
+            </span>
+          </summary>
+          <p class="qa__answer">{f.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .faq__head {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .faq__more {
+    color: var(--muted);
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .faq__more a {
+    color: var(--ink);
+  }
+
+  .faq__list {
+    border-top: 1px solid var(--line);
+  }
+
+  .qa {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .qa summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: clamp(1.1rem, 1rem + 0.6vw, 1.45rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .qa__icon {
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    transition:
+      transform 0.5s var(--ease),
+      background-color 0.3s,
+      color 0.3s,
+      border-color 0.3s;
+  }
+
+  .qa[open] .qa__icon {
+    transform: rotate(45deg);
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+  }
+
+  @media (hover: hover) {
+    .qa summary:hover .qa__icon {
+      border-color: var(--ink);
+    }
+  }
+
+  .qa__answer {
+    padding-bottom: 1.6rem;
+    padding-right: 4rem;
+    color: var(--muted);
+    max-width: 52ch;
+  }
+
+  /* Apertura animada donde el navegador lo soporta */
+  @supports (interpolate-size: allow-keywords) {
+    .qa {
+      interpolate-size: allow-keywords;
+    }
+    .qa::details-content {
+      height: 0;
+      overflow: clip;
+      transition:
+        height 0.45s var(--ease),
+        content-visibility 0.45s allow-discrete;
+    }
+    .qa[open]::details-content {
+      height: auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .faq__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+    .faq__head {
+      grid-column: 1 / span 5;
+      position: sticky;
+      top: calc(var(--nav-h) + 2.5rem);
+      align-self: start;
+    }
+    .faq__list {
+      grid-column: 7 / -1;
+    }
+  }
+</style>

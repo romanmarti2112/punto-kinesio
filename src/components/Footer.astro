@@ -1,0 +1,123 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { mapsUrl, primaryWhatsApp } from '../lib/links';
+
+const year = new Date().getFullYear();
+const links = [
+  { label: 'Instagram', href: business.instagram.url },
+  { label: 'WhatsApp', href: primaryWhatsApp },
+  { label: 'Google Maps', href: mapsUrl },
+];
+---
+
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <Logo tone="light" class="footer__logo" />
+        <p>
+          {business.activity}
+          <br />
+          {business.location.city}, {business.location.country}
+        </p>
+      </div>
+
+      <nav aria-label="Redes y contacto">
+        <ul class="footer__links" role="list">
+          {links.map((l) => (
+            <li>
+              <a href={l.href} target="_blank" rel="noopener">
+                {l.label}
+                <Icon name="arrow-up-right" size={16} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p>
+        © {year} {business.name}
+      </p>
+      <a href="#inicio" class="footer__top-link">
+        Volver arriba <span aria-hidden="true">↑</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--ink);
+    padding-block: clamp(3.5rem, 6vw, 5.5rem) 2rem;
+    font-size: 0.95rem;
+  }
+
+  .footer__top {
+    display: grid;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgb(246 243 238 / 0.12);
+  }
+
+  .footer__brand {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .footer__brand :global(.footer__logo) {
+    font-size: 1.35rem;
+  }
+
+  .footer__brand p {
+    color: rgb(246 243 238 / 0.62);
+    line-height: 1.7;
+  }
+
+  .footer__links {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .footer__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-block: 0.35rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+
+  .footer__links a:hover {
+    color: #8cc6ee;
+  }
+
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.75rem;
+    font-size: 0.8rem;
+    color: rgb(246 243 238 / 0.5);
+  }
+
+  .footer__top-link:hover {
+    color: var(--paper);
+  }
+
+  @media (min-width: 768px) {
+    .footer__top {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+    .footer__links {
+      grid-auto-flow: column;
+      gap: 2.5rem;
+    }
+  }
+</style>

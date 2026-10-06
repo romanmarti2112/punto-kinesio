@@ -1,0 +1,145 @@
+---
+import { Picture } from 'astro:assets';
+import { business } from '../data/business';
+
+const { wellbeing } = business.images;
+---
+
+<section class="why section" id="por-que" aria-labelledby="why-title">
+  <div class="why__grid container">
+    <div class="why__aside">
+      <div class="why__sticky">
+        <p class="eyebrow" data-reveal>
+          <span class="num">03</span> Por qué {business.name}
+        </p>
+        <h2 id="why-title" class="title" data-reveal style="--d: 80ms">
+          Un espacio pensado <em>para vos.</em>
+        </h2>
+        <figure class="why__media frame" data-reveal="clip" style="--d: 120ms">
+          <div data-parallax="0.05">
+            <Picture
+              src={wellbeing.src}
+              alt={wellbeing.alt}
+              formats={['avif', 'webp']}
+              widths={[480, 800, 1100]}
+              sizes="(min-width: 1024px) 36vw, 100vw"
+            />
+          </div>
+        </figure>
+      </div>
+    </div>
+
+    <ol class="why__list" role="list">
+      {business.reasons.map((r, i) => (
+        <li class="reason" data-reveal style={`--d: ${i * 40}ms`}>
+          <span class="reason__num">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h3 class="reason__title">{r.title}</h3>
+            <p class="reason__text">{r.text}</p>
+          </div>
+          <span class="reason__dot" aria-hidden="true" />
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .why__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .why__sticky {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .why__media {
+    margin-top: 1rem;
+    aspect-ratio: 16 / 11;
+  }
+
+  .why__list {
+    border-top: 1px solid var(--line);
+  }
+
+  .reason {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.5rem;
+    padding-block: clamp(1.5rem, 1rem + 1.6vw, 2.5rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .reason__num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    padding-top: 0.6em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .reason__title {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    transition: transform 0.5s var(--ease);
+  }
+
+  .reason__text {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    max-width: 40ch;
+  }
+
+  /* Al pasar: el título se desplaza y aparece el punto azul */
+  .reason__dot {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--blue);
+    transform: translateY(-50%) scale(0);
+    transition: transform 0.45s var(--ease);
+  }
+
+  @media (hover: hover) {
+    .reason:hover .reason__title {
+      transform: translateX(0.6rem);
+    }
+    .reason:hover .reason__dot {
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .why__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+    .why__aside {
+      grid-column: 1 / span 5;
+    }
+    .why__sticky {
+      position: sticky;
+      top: calc(var(--nav-h) + 2.5rem);
+    }
+    .why__media {
+      aspect-ratio: 4 / 3.3;
+    }
+    .why__list {
+      grid-column: 7 / -1;
+      align-self: start;
+      margin-top: 2.25rem;
+    }
+    .reason {
+      grid-template-columns: 4rem 1fr 2rem;
+    }
+  }
+</style>

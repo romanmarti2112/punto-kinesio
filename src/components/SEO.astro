@@ -1,0 +1,81 @@
+---
+import { business } from '../data/business';
+import { mapsUrl, toWhatsAppNumber } from '../lib/links';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Ruta de la imagen para redes (en /public). */
+  ogImage?: string;
+}
+
+const { title, description, ogImage = '/og-image.jpg' } = Astro.props;
+const site = new URL(business.siteUrl);
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImageUrl = new URL(ogImage, site).href;
+const firstPhone = business.whatsapp.numbers[0]?.number;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': ['LocalBusiness', 'Physiotherapy'],
+  '@id': `${site.href}#negocio`,
+  name: business.name,
+  description: business.description,
+  url: site.href,
+  image: ogImageUrl,
+  logo: new URL('/apple-touch-icon.png', site).href,
+  ...(firstPhone ? { telephone: `+${toWhatsAppNumber(firstPhone)}` } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    ...(business.location.street ? { streetAddress: business.location.street } : {}),
+    addressLocality: business.location.city,
+    addressRegion: business.location.region,
+    addressCountry: business.location.countryCode,
+  },
+  areaServed: { '@type': 'City', name: business.location.city },
+  hasMap: mapsUrl,
+  sameAs: [business.instagram.url, business.linktree, ...business.sameAs],
+  knowsAbout: business.services.map((s) => s.name),
+};
+
+const faqPage = business.faqs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: business.faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    }
+  : null;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content="index, follow" />
+<meta name="geo.region" content="AR-M" />
+<meta name="geo.placename" content={`${business.location.city}, ${business.location.country}`} />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_AR" />
+<meta property="og:site_name" content={business.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta
+  property="og:image:alt"
+  content={`${business.name} — ${business.activity} en ${business.location.city}`}
+/>
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+{faqPage && <script type="application/ld+json" set:html={JSON.stringify(faqPage)} />}

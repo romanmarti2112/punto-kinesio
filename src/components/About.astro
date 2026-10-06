@@ -1,0 +1,200 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+
+const { space, care } = business.images;
+const facts = [
+  ...business.services.map((s) => s.name),
+  `${business.location.city}, ${business.location.country}`,
+];
+---
+
+<section class="about section" id="nosotros" aria-labelledby="about-title">
+  <div class="about__grid container">
+    <header class="about__text">
+      <p class="eyebrow" data-reveal>
+        <span class="num">01</span> Nosotros
+      </p>
+      <h2 id="about-title" class="title" data-reveal style="--d: 80ms">
+        Movimiento, bienestar y <em>acompañamiento profesional.</em>
+      </h2>
+      <p class="lead" data-reveal style="--d: 160ms">
+        {business.name} es un espacio de kinesiología y fisioterapia en {business.location.city}. Un
+        lugar pensado para acompañarte en tu movimiento, con atención cercana y profesional.
+      </p>
+
+      <ul class="about__facts" role="list" data-reveal style="--d: 220ms">
+        {facts.map((f) => (
+          <li>
+            <span class="about__dot" aria-hidden="true" />
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      <a class="link-line about__link" href="#servicios" data-reveal style="--d: 280ms">
+        Ver servicios <Icon name="arrow" size={18} />
+      </a>
+    </header>
+
+    <div class="about__media">
+      <figure class="about__main frame" data-reveal="clip">
+        <div data-parallax="0.05">
+          <Picture
+            src={space.src}
+            alt={space.alt}
+            formats={['avif', 'webp']}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 40vw, 90vw"
+          />
+        </div>
+      </figure>
+      <figure class="about__second frame" data-reveal="clip" style="--d: 150ms">
+        <Picture
+          src={care.src}
+          alt={care.alt}
+          formats={['avif', 'webp']}
+          widths={[360, 600, 900]}
+          sizes="(min-width: 1024px) 22vw, 50vw"
+        />
+      </figure>
+      <p class="about__caption" aria-hidden="true">
+        <span class="serif">Punto</span> de partida
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: 3.5rem;
+  }
+
+  .about__text {
+    display: grid;
+    gap: 1.5rem;
+    align-content: center;
+    justify-items: start;
+  }
+
+  .about__facts {
+    display: grid;
+    width: 100%;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .about__facts li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-block: 0.95rem;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .about__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue);
+  }
+
+  .about__link {
+    margin-top: 0.5rem;
+  }
+
+  /* Composición de imágenes superpuestas */
+  .about__media {
+    position: relative;
+    padding-bottom: 22%;
+    margin-right: calc(var(--gutter) * -1);
+  }
+
+  .about__main {
+    aspect-ratio: 4 / 4.6;
+    width: 82%;
+    margin-left: auto;
+  }
+
+  .about__second {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 46%;
+    aspect-ratio: 4 / 5;
+    border: 0.6rem solid var(--paper);
+    border-width: 0.6rem 0.6rem 0 0;
+  }
+
+  .about__caption {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .about__caption .serif {
+    font-size: 1.35rem;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  @media (min-width: 768px) {
+    .about__media {
+      margin-right: 0;
+      padding-bottom: 16%;
+    }
+    .about__main {
+      width: 74%;
+    }
+    .about__second {
+      width: 40%;
+      bottom: 0;
+    }
+    .about__caption {
+      right: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .about__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      align-items: center;
+    }
+    .about__media {
+      grid-column: 1 / span 6;
+      grid-row: 1;
+    }
+    .about__text {
+      grid-column: 8 / -1;
+      grid-row: 1;
+    }
+    .about__text .title {
+      font-size: clamp(2.4rem, 0.9rem + 3.1vw, 4.1rem);
+    }
+    .about__main {
+      width: 78%;
+      margin-left: 0;
+    }
+    .about__second {
+      left: auto;
+      right: 0;
+      width: 42%;
+      border-width: 0.75rem 0 0 0.75rem;
+    }
+    .about__caption {
+      right: auto;
+      left: 0;
+      bottom: 1rem;
+    }
+  }
+</style>
