@@ -1,0 +1,112 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { primaryWhatsApp } from '../lib/links';
+
+const { cta } = business.images;
+---
+
+<section class="final on-dark" aria-labelledby="final-title">
+  <div class="final__bg frame" aria-hidden="true">
+    <div data-parallax="0.06">
+      <Picture
+        src={cta.src}
+        alt=""
+        formats={['avif', 'webp']}
+        widths={[640, 1080, 1600, 2200]}
+        sizes="100vw"
+      />
+    </div>
+  </div>
+
+  <div class="final__content container">
+    <span class="final__dot" data-reveal="scale" aria-hidden="true"></span>
+    <h2 id="final-title" class="final__title" data-reveal style="--d: 80ms">
+      Tu bienestar empieza con un <em>primer paso.</em>
+    </h2>
+    <div data-reveal style="--d: 180ms">
+      <a class="btn btn--light final__btn" href={primaryWhatsApp} target="_blank" rel="noopener">
+        <Icon name="whatsapp" />
+        Solicitar turno
+      </a>
+    </div>
+    <p class="final__sub" data-reveal="fade" style="--d: 260ms">
+      {business.name} · {business.activity} · {business.location.city}
+    </p>
+  </div>
+</section>
+
+<style>
+  .final {
+    position: relative;
+    isolation: isolate;
+    min-height: min(92svh, 56rem);
+    display: grid;
+    align-items: center;
+    padding-block: var(--section);
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .final__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--ink);
+  }
+
+  .final__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(14 20 25 / 0.55), rgb(14 20 25 / 0.35) 45%, rgb(14 20 25 / 0.8)),
+      rgb(7 38 61 / 0.25);
+  }
+
+  .final__content {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .final__dot {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 0 8px rgb(11 111 179 / 0.25);
+  }
+
+  .final__title {
+    font-size: clamp(2.6rem, 1rem + 7vw, 7.5rem);
+    font-weight: 600;
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    max-width: 14ch;
+    text-wrap: balance;
+  }
+
+  .final__title em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: #8cc6ee;
+    letter-spacing: -0.015em;
+  }
+
+  .final__btn {
+    min-height: 3.75rem;
+    padding-inline: 2rem;
+  }
+
+  .final__sub {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(246 243 238 / 0.6);
+  }
+</style>

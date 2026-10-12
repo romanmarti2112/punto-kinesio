@@ -1,0 +1,254 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { primaryWhatsApp } from '../lib/links';
+
+const { team } = business;
+---
+
+<section class="team section" id="profesionales" aria-labelledby="team-title">
+  <div class="container">
+    <header class="team__head">
+      <p class="eyebrow" data-reveal>
+        <span class="num">04</span> Profesionales
+      </p>
+      <h2 id="team-title" class="title" data-reveal style="--d: 80ms">
+        Las personas detrás de <em>cada sesión.</em>
+      </h2>
+    </header>
+
+    {team.length > 0 ? (
+      <ul class="team__grid" role="list">
+        {team.map((m, i) => (
+          <li class="member" data-reveal style={`--d: ${i * 80}ms`}>
+            <figure class="member__photo frame">
+              {m.photo ? (
+                <Picture
+                  src={m.photo.src}
+                  alt={m.photo.alt}
+                  formats={['avif', 'webp']}
+                  widths={[360, 600, 900]}
+                  sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 90vw"
+                />
+              ) : (
+                <span class="member__initial" aria-hidden="true">
+                  {m.name.charAt(0)}
+                </span>
+              )}
+            </figure>
+            <p class="member__role">{m.specialty}</p>
+            <h3 class="member__name">{m.name}</h3>
+            <p class="member__desc">{m.description}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="team__soon" data-reveal="scale">
+        <div class="team__soon-text">
+          <p class="team__soon-label">Próximamente</p>
+          <p class="team__soon-title">
+            Muy pronto vas a poder conocer al equipo de <span class="serif">{business.name}.</span>
+          </p>
+          <p class="team__soon-sub">
+            Mientras tanto, escribinos y te contamos quién va a acompañarte.
+          </p>
+          <a class="btn btn--light" href={primaryWhatsApp} target="_blank" rel="noopener">
+            <Icon name="whatsapp" />
+            Escribinos
+          </a>
+        </div>
+        <div class="team__soon-art" aria-hidden="true">
+          <span class="ring r1" />
+          <span class="ring r2" />
+          <span class="ring r3" />
+          <span class="core" />
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .team {
+    background: var(--white);
+  }
+
+  .team__head {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .team__head .title {
+    max-width: 14ch;
+  }
+
+  /* ----- Con equipo cargado ----- */
+  .team__grid {
+    display: grid;
+    gap: 3rem 2rem;
+  }
+
+  .member__photo {
+    aspect-ratio: 3 / 4;
+    display: grid;
+    place-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .member__initial {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 6rem;
+    color: var(--blue);
+  }
+
+  .member__role {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+
+  .member__name {
+    margin-top: 0.4rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .member__desc {
+    margin-top: 0.5rem;
+    color: var(--muted);
+  }
+
+  /* ----- Sin equipo cargado: panel "próximamente" ----- */
+  .team__soon {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    background: var(--blue);
+    color: var(--white);
+  }
+
+  .team__soon-text {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    padding: clamp(2rem, 1rem + 5vw, 5rem);
+  }
+
+  .team__soon-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .team__soon-title {
+    font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .team__soon-title .serif {
+    color: var(--white);
+  }
+
+  .team__soon-sub {
+    color: rgb(255 255 255 / 0.78);
+    max-width: 36ch;
+    margin-bottom: 0.75rem;
+  }
+
+  .team__soon .btn--light {
+    --btn-hover-bg: var(--ink);
+  }
+
+  /* Ondas concéntricas: el punto como origen */
+  .team__soon-art {
+    position: relative;
+    min-height: 14rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .ring,
+  .core {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .ring {
+    border: 1px solid rgb(255 255 255 / 0.28);
+    aspect-ratio: 1;
+  }
+
+  .r1 {
+    width: 30%;
+  }
+  .r2 {
+    width: 58%;
+  }
+  .r3 {
+    width: 88%;
+  }
+
+  .core {
+    width: 2.5rem;
+    aspect-ratio: 1;
+    background: var(--white);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ring {
+      animation: breathe 6s var(--ease-in-out) infinite;
+    }
+    .r2 {
+      animation-delay: 0.6s;
+    }
+    .r3 {
+      animation-delay: 1.2s;
+    }
+  }
+
+  @keyframes breathe {
+    50% {
+      transform: scale(1.06);
+      opacity: 0.55;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .team__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .team__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .team__soon {
+      grid-template-columns: 1.15fr 1fr;
+      min-height: 30rem;
+    }
+    .team__soon-text {
+      align-content: center;
+    }
+    .team__soon-art {
+      min-height: 0;
+    }
+    .r3 {
+      width: 120%;
+    }
+  }
+</style>

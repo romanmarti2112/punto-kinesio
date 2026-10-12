@@ -1,0 +1,168 @@
+---
+import { Picture } from 'astro:assets';
+import { business } from '../data/business';
+
+const { gallery } = business;
+---
+
+<section class="gallery section" id="galeria" aria-labelledby="gallery-title">
+  <div class="container gallery__head">
+    <p class="eyebrow" data-reveal>
+      <span class="num">05</span> Galería
+    </p>
+    <h2 id="gallery-title" class="title" data-reveal style="--d: 80ms">
+      El movimiento, <em>en imágenes.</em>
+    </h2>
+    <p class="gallery__hint" aria-hidden="true">
+      Deslizá <span>→</span>
+    </p>
+  </div>
+
+  <div class="gallery__scroller" tabindex="0" aria-label="Galería de imágenes, desplazable">
+    <ul class="gallery__grid" role="list">
+      {gallery.map((item, i) => (
+        <li class={`gallery__item gallery__item--${item.shape}`}>
+          <figure class="frame" data-reveal="clip" style={`--d: ${(i % 3) * 90}ms`}>
+            <Picture
+              src={item.src}
+              alt={item.alt}
+              formats={['avif', 'webp']}
+              widths={[400, 700, 1000, 1400]}
+              sizes={
+                item.shape === 'wide'
+                  ? '(min-width: 1024px) 50vw, 80vw'
+                  : '(min-width: 1024px) 25vw, 80vw'
+              }
+            />
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    padding-bottom: calc(var(--section) * 0.75);
+  }
+
+  .gallery__head {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .gallery__hint {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .gallery__hint span {
+    display: inline-block;
+    color: var(--blue);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .gallery__hint span {
+      animation: nudge 1.8s var(--ease-in-out) infinite;
+    }
+  }
+
+  @keyframes nudge {
+    50% {
+      transform: translateX(6px);
+    }
+  }
+
+  /* ----- Mobile: carrusel con scroll-snap ----- */
+  .gallery__scroller {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+  }
+
+  .gallery__scroller::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__grid {
+    display: flex;
+    gap: 0.75rem;
+    width: max-content;
+  }
+
+  .gallery__item {
+    width: 78vw;
+    max-width: 22rem;
+    scroll-snap-align: start;
+  }
+
+  .gallery__item .frame {
+    aspect-ratio: 4 / 5;
+    height: 100%;
+  }
+
+  .gallery__item :global(img) {
+    transition: transform 1.2s var(--ease);
+  }
+
+  @media (hover: hover) {
+    .gallery__item:hover :global(img) {
+      transform: scale(1.05);
+    }
+  }
+
+  /* ----- Escritorio: mosaico editorial ----- */
+  @media (min-width: 768px) {
+    .gallery__hint {
+      display: none;
+    }
+
+    .gallery__scroller {
+      overflow: visible;
+      max-width: var(--max);
+      margin-inline: auto;
+    }
+
+    .gallery__grid {
+      width: auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: clamp(11rem, 18vw, 18rem);
+      grid-auto-flow: dense;
+      gap: clamp(0.75rem, 1.2vw, 1.25rem);
+    }
+
+    .gallery__item {
+      width: auto;
+      max-width: none;
+    }
+
+    .gallery__item .frame {
+      aspect-ratio: auto;
+    }
+
+    .gallery__item--tall {
+      grid-row: span 2;
+    }
+
+    .gallery__item--wide {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery__head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+    .gallery__head .eyebrow {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

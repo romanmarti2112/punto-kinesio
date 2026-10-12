@@ -1,0 +1,106 @@
+---
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+
+const { instagram } = business;
+---
+
+<section class="ig section on-dark" id="instagram" aria-labelledby="ig-title">
+  <p class="ig__giant" aria-hidden="true">
+    <span data-drift="14">
+      @{instagram.handle} · @{instagram.handle} ·
+    </span>
+  </p>
+
+  <div class="ig__body container">
+    <div class="ig__text">
+      <p class="eyebrow" data-reveal>
+        <span class="num">06</span> Instagram
+      </p>
+      <h2 id="ig-title" class="title" data-reveal style="--d: 80ms">
+        Seguinos en <em>Instagram</em>
+      </h2>
+      <p class="lead" data-reveal style="--d: 140ms">
+        Novedades y el día a día de {business.name}, en{' '}
+        <a class="ig__handle" href={instagram.url} target="_blank" rel="noopener">
+          @{instagram.handle}
+        </a>
+        .
+      </p>
+    </div>
+    <a
+      class="btn btn--light ig__cta"
+      href={instagram.url}
+      target="_blank"
+      rel="noopener"
+      data-reveal
+      style="--d: 200ms"
+    >
+      <Icon name="instagram" />
+      Ver Instagram
+    </a>
+  </div>
+</section>
+
+<style>
+  .ig {
+    background: var(--blue);
+    overflow: hidden;
+  }
+
+  .ig .title em {
+    color: var(--white);
+  }
+
+  .ig.on-dark .eyebrow::before {
+    background: var(--white);
+  }
+
+  .ig__giant {
+    font-size: clamp(4.5rem, 2rem + 13vw, 15rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(255 255 255 / 0.35);
+    margin-bottom: clamp(2.5rem, 5vw, 5rem);
+    user-select: none;
+  }
+
+  .ig__giant span {
+    display: inline-block;
+    transform: translate3d(var(--dx, 0%), 0, 0);
+    will-change: transform;
+  }
+
+  .ig__body {
+    display: grid;
+    gap: 2rem;
+    justify-items: start;
+  }
+
+  .ig__text {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .ig .lead {
+    color: rgb(255 255 255 / 0.82);
+  }
+
+  .ig__handle {
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  @media (min-width: 1024px) {
+    .ig__body {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+</style>

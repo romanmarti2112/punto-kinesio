@@ -1,0 +1,301 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { primaryWhatsApp } from '../lib/links';
+
+const links = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#nosotros', label: 'Nosotros' },
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#profesionales', label: 'Profesionales' },
+  { href: '#preguntas', label: 'Preguntas frecuentes' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<header class="nav" data-nav>
+  <div class="nav__inner container">
+    <a href="#inicio" class="nav__brand" aria-label={`${business.name}, ir al inicio`}>
+      <Logo />
+    </a>
+
+    <nav class="nav__links" aria-label="Principal">
+      <ul role="list">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} data-nav-link>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="btn nav__cta" href={primaryWhatsApp} target="_blank" rel="noopener">
+      Solicitar turno
+      <Icon name="arrow-up-right" />
+    </a>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      aria-label="Abrir menú"
+      data-menu-toggle
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Menú mobile a pantalla completa -->
+<div class="menu" id="menu-mobile" data-menu>
+  <nav aria-label="Menú mobile" class="menu__nav container">
+    <ol role="list">
+      {links.map((l, i) => (
+        <li style={`--i:${i}`}>
+          <a href={l.href}>
+            <span class="menu__num">{String(i + 1).padStart(2, '0')}</span>
+            {l.label}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+  <div class="menu__foot container">
+    <a class="btn btn--wa btn--block" href={primaryWhatsApp} target="_blank" rel="noopener">
+      <Icon name="whatsapp" />
+      Solicitar turno por WhatsApp
+    </a>
+    <a class="menu__ig" href={business.instagram.url} target="_blank" rel="noopener">
+      <Icon name="instagram" size={18} />@{business.instagram.handle}
+    </a>
+  </div>
+</div>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(246 243 238 / 0.88);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 0.4s,
+      background-color 0.4s;
+  }
+
+  .nav:global(.is-scrolled) {
+    border-bottom-color: var(--line);
+  }
+
+  .nav__inner {
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .nav__brand {
+    font-size: 1.05rem;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .nav__links,
+  .nav__cta {
+    display: none;
+  }
+
+  .nav__links ul {
+    display: flex;
+    gap: clamp(1rem, 1.8vw, 2rem);
+  }
+
+  .nav__links a {
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    padding-block: 0.4rem;
+    transition: color 0.3s;
+  }
+
+  /* Indicador: el "punto" de la marca bajo el link activo */
+  .nav__links a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.35rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--blue);
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.35s var(--ease);
+  }
+
+  .nav__links a:hover,
+  .nav__links a[aria-current] {
+    color: var(--ink);
+  }
+
+  .nav__links a:hover::after,
+  .nav__links a[aria-current]::after {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .nav__cta {
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    font-size: 0.72rem;
+  }
+
+  /* Hamburguesa: dos líneas que se cruzan */
+  .nav__toggle {
+    position: relative;
+    z-index: 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.6rem;
+    display: grid;
+    place-content: center;
+    gap: 6px;
+  }
+
+  .nav__toggle span {
+    display: block;
+    width: 1.6rem;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.5s var(--ease);
+  }
+
+  :global(.menu-open) .nav__toggle span:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+  :global(.menu-open) .nav__toggle span:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  /* ----- Menú mobile ----- */
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: calc(var(--nav-h) + 1.5rem);
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    background: var(--paper);
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+    transition:
+      clip-path 0.7s var(--ease-in-out),
+      visibility 0s 0.7s;
+  }
+
+  :global(.menu-open) .menu {
+    clip-path: inset(0 0 0 0);
+    visibility: visible;
+    transition:
+      clip-path 0.7s var(--ease-in-out),
+      visibility 0s;
+  }
+
+  :global(.menu-open) body {
+    overflow: hidden;
+  }
+
+  .menu__nav ol {
+    display: grid;
+  }
+
+  .menu__nav li {
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.6s var(--ease);
+  }
+
+  :global(.menu-open) .menu__nav li {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.2s + var(--i) * 0.05s);
+  }
+
+  .menu__nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    font-size: clamp(1.6rem, 7.5vw, 2.4rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .menu__num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .menu__foot {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: center;
+  }
+
+  .menu__ig {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  @media (max-height: 560px) {
+    .menu__nav a {
+      padding-block: 0.45rem;
+      font-size: 1.4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .nav__links,
+    .nav__cta {
+      display: flex;
+    }
+    .nav__toggle,
+    .menu {
+      display: none;
+    }
+    .nav__brand {
+      margin-right: 0;
+    }
+    .nav__links {
+      margin-inline: auto;
+    }
+  }
+
+  @media (min-width: 1024px) and (max-width: 1180px) {
+    .nav__links ul {
+      gap: 1rem;
+    }
+    .nav__links a {
+      font-size: 0.8rem;
+    }
+  }
+</style>

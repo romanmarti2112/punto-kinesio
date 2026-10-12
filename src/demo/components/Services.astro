@@ -1,0 +1,221 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { whatsappUrlFor } from '../lib/links';
+---
+
+<section class="services section on-dark" id="servicios" aria-labelledby="services-title">
+  <div class="container">
+    <header class="services__head">
+      <p class="eyebrow" data-reveal>
+        <span class="num">02</span> Servicios
+      </p>
+      <h2 id="services-title" class="title" data-reveal style="--d: 80ms">
+        Dos disciplinas, una misma <em>mirada</em> sobre el movimiento.
+      </h2>
+      <p class="lead" data-reveal style="--d: 160ms">
+        Consultanos por WhatsApp y te contamos cómo podemos acompañarte.
+      </p>
+    </header>
+
+    <ol class="services__list" role="list">
+      {business.services.map((s, i) => (
+        <li class="service" id={`servicio-${s.slug}`}>
+          <figure class="service__media frame" data-reveal="clip">
+            <div data-parallax="0.05">
+              <Picture
+                src={s.image.src}
+                alt={s.image.alt}
+                formats={['avif', 'webp']}
+                widths={[480, 800, 1200, 1600]}
+                sizes="(min-width: 1024px) 55vw, 100vw"
+              />
+            </div>
+          </figure>
+
+          <div class="service__body">
+            <span class="service__num" data-reveal>
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="service__name" data-reveal style="--d: 60ms">
+              {s.name}
+            </h3>
+            <p class="service__desc" data-reveal style="--d: 120ms">
+              {s.description}
+            </p>
+            {s.duration && (
+              <dl class="service__meta" data-reveal style="--d: 160ms">
+                <dt>Duración</dt>
+                <dd>{s.duration}</dd>
+              </dl>
+            )}
+            <a
+              class="btn btn--light service__cta"
+              href={whatsappUrlFor(s.name)}
+              target="_blank"
+              rel="noopener"
+              data-reveal
+              style="--d: 200ms"
+              aria-label={`${s.ctaLabel} por ${s.name} en WhatsApp`}
+            >
+              {s.ctaLabel}
+              <Icon name="arrow-up-right" />
+            </a>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <p class="services__note" data-reveal>
+      <Icon name="plus" size={18} />
+      Próximamente: el detalle de cada tratamiento.
+    </p>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--ink);
+  }
+
+  .services__head {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .services__head .title {
+    max-width: 16ch;
+  }
+
+  .services__list {
+    margin-top: clamp(3.5rem, 7vw, 7rem);
+    display: grid;
+    gap: clamp(4rem, 8vw, 8rem);
+  }
+
+  .service {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .service__media {
+    aspect-ratio: 4 / 3.4;
+    margin-inline: calc(var(--gutter) * -1);
+    background: var(--ink-2);
+  }
+
+  .service__media :global(img) {
+    transition: transform 1.2s var(--ease);
+  }
+
+  .service__body {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    align-content: center;
+  }
+
+  .service__num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #5fb0e6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .service__name {
+    font-size: clamp(2.6rem, 1.4rem + 5.2vw, 5.75rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+
+  .service__desc {
+    max-width: 34ch;
+    color: rgb(246 243 238 / 0.72);
+    font-size: 1.05rem;
+    text-wrap: pretty;
+  }
+
+  .service__meta {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .service__meta dt {
+    color: rgb(246 243 238 / 0.55);
+  }
+
+  .service__cta {
+    margin-top: 0.75rem;
+  }
+
+  .services__note {
+    margin-top: clamp(3.5rem, 6vw, 6rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(246 243 238 / 0.14);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: rgb(246 243 238 / 0.6);
+  }
+
+  @media (hover: hover) {
+    .service:hover .service__media :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .service__media {
+      margin-inline: 0;
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services__head {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      align-items: end;
+    }
+    .services__head .eyebrow {
+      grid-column: 1 / -1;
+    }
+    .services__head .title {
+      grid-column: 1 / span 8;
+    }
+    .services__head .lead {
+      grid-column: 9 / -1;
+      padding-bottom: 0.5rem;
+    }
+
+    .service {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      align-items: center;
+    }
+    .service__media {
+      grid-column: 1 / span 7;
+      aspect-ratio: 5 / 4;
+    }
+    .service__body {
+      grid-column: 9 / -1;
+    }
+    .service__name {
+      font-size: clamp(2.75rem, 0.6rem + 4.2vw, 5rem);
+    }
+    /* Alterna lados */
+    .service:nth-child(even) .service__media {
+      grid-column: 6 / -1;
+      grid-row: 1;
+    }
+    .service:nth-child(even) .service__body {
+      grid-column: 1 / span 4;
+      grid-row: 1;
+    }
+  }
+</style>

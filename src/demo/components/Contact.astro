@@ -1,0 +1,195 @@
+---
+import Icon from './Icon.astro';
+import { business } from '../data/business';
+import { formatPhone, whatsappUrl } from '../lib/links';
+
+const channels = [
+  ...business.whatsapp.numbers.map((n) => ({
+    icon: 'whatsapp' as const,
+    label: n.label,
+    value: formatPhone(n.number),
+    href: whatsappUrl(n.number),
+  })),
+  {
+    icon: 'instagram' as const,
+    label: 'Instagram',
+    value: `@${business.instagram.handle}`,
+    href: business.instagram.url,
+  },
+];
+---
+
+<section class="contact section" id="contacto" aria-labelledby="contact-title">
+  <div class="contact__grid container">
+    <header class="contact__head">
+      <p class="eyebrow" data-reveal>
+        <span class="num">09</span> Contacto
+      </p>
+      <h2 id="contact-title" class="contact__title" data-reveal style="--d: 80ms">
+        ¿Querés consultar por <em>un turno?</em>
+      </h2>
+      <p class="lead" data-reveal style="--d: 140ms">
+        Escribinos por WhatsApp y coordinamos. También podés encontrarnos en Instagram.
+      </p>
+    </header>
+
+    <ul class="channels" role="list">
+      {channels.map((c, i) => (
+        <li data-reveal style={`--d: ${120 + i * 70}ms`}>
+          <a class="channel" href={c.href} target="_blank" rel="noopener">
+            <span class="channel__icon">
+              <Icon name={c.icon} />
+            </span>
+            <span class="channel__text">
+              <span class="channel__label">{c.label}</span>
+              <span class="channel__value">{c.value}</span>
+            </span>
+            <span class="channel__arrow">
+              <Icon name="arrow-up-right" />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .contact__head {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .contact__title {
+    font-size: clamp(2.5rem, 1.2rem + 5.4vw, 5.75rem);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .contact__title em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--blue);
+    letter-spacing: -0.015em;
+  }
+
+  .channels {
+    border-top: 1px solid var(--ink);
+  }
+
+  .channels li {
+    border-bottom: 1px solid var(--ink);
+  }
+
+  /* Fila de canal: se rellena de azul de izquierda a derecha al pasar */
+  .channel {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.1rem;
+    padding: clamp(1.25rem, 1rem + 1.2vw, 2rem) 0.25rem;
+    isolation: isolate;
+    transition:
+      color 0.4s var(--ease),
+      padding 0.5s var(--ease);
+  }
+
+  .channel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.55s var(--ease);
+  }
+
+  .channel__icon {
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    transition: background-color 0.4s;
+  }
+
+  .channel__icon :global(svg) {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .channel__text {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .channel__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.4s;
+  }
+
+  .channel__value {
+    font-size: clamp(1.35rem, 1rem + 1.6vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .channel__arrow :global(svg) {
+    width: 1.6rem;
+    height: 1.6rem;
+    transition: transform 0.5s var(--ease);
+  }
+
+  @media (hover: hover) {
+    .channel:hover {
+      color: var(--white);
+      padding-inline: 1.25rem;
+    }
+    .channel:hover::before {
+      transform: scaleX(1);
+    }
+    .channel:hover .channel__label {
+      color: rgb(255 255 255 / 0.75);
+    }
+    .channel:hover .channel__icon {
+      background: var(--white);
+      color: var(--blue);
+    }
+    .channel:hover .channel__arrow :global(svg) {
+      transform: rotate(45deg);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .contact__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      align-items: end;
+    }
+    .contact__head {
+      grid-column: 1 / span 6;
+    }
+    .channels {
+      grid-column: 8 / -1;
+    }
+  }
+</style>

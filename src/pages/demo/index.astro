@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../demo/layouts/BaseLayout.astro';
+import Navbar from '../../demo/components/Navbar.astro';
+import Hero from '../../demo/components/Hero.astro';
+import About from '../../demo/components/About.astro';
+import Services from '../../demo/components/Services.astro';
+import WhyUs from '../../demo/components/WhyUs.astro';
+import Team from '../../demo/components/Team.astro';
+import Gallery from '../../demo/components/Gallery.astro';
+import Instagram from '../../demo/components/Instagram.astro';
+import Location from '../../demo/components/Location.astro';
+import Faq from '../../demo/components/Faq.astro';
+import Contact from '../../demo/components/Contact.astro';
+import FinalCTA from '../../demo/components/FinalCTA.astro';
+import Footer from '../../demo/components/Footer.astro';
+import WhatsAppFloat from '../../demo/components/WhatsAppFloat.astro';
+import { business } from '../../demo/data/business';
+
+const title = `${business.name} | ${business.activity} en ${business.location.city}`;
+const description = `${business.name}: kinesiología y fisioterapia en ${business.location.city} (demo), ${business.location.country}. Atención personalizada y turnos por WhatsApp.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Navbar />
+  <main id="contenido">
+    <Hero />
+    <About />
+    <Services />
+    <WhyUs />
+    <Team />
+    <Gallery />
+    <Instagram />
+    <Location />
+    <Faq />
+    <Contact />
+    <FinalCTA />
+  </main>
+  <Footer />
+  <WhatsAppFloat />
+</BaseLayout>
